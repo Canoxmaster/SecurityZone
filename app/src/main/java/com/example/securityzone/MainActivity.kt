@@ -11,12 +11,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    private var isBlocked = true
+    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var statusTextView: TextView
     private var spanish = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        preferencesManager = PreferencesManager(this)
+        statusTextView = findViewById(R.id.textView2)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -26,11 +32,11 @@ class MainActivity : AppCompatActivity() {
         // Set up click listeners for each button
         setupButtonClickListeners()
 
-        // Set up the toggle for the TextView
-        setupTextViewToggle()
-
         // Set up the toggle for the country
         setupCountryToggle()
+
+        // Update the status TextView
+        updateStatusTextView()
     }
 
     private fun setupButtonClickListeners() {
@@ -50,20 +56,17 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, InformeActivity::class.java))
         }
     }
-    private fun setupTextViewToggle() {
-        val statusTextView = findViewById<TextView>(R.id.textView2)
-        statusTextView.setOnClickListener {
-            if (isBlocked) {
-                statusTextView.text = "Status: Abierto"
-                statusTextView.setBackgroundColor(resources.getColor(R.color.green, theme))
-                isBlocked = false
-            } else {
-                statusTextView.text = "Status: Bloqueado"
-                statusTextView.setBackgroundColor(resources.getColor(R.color.black, theme))
-                isBlocked = true
-            }
+
+    private fun updateStatusTextView() {
+        if (preferencesManager.isBlocked) {
+            statusTextView.text = "Status: Bloqueado"
+            statusTextView.setBackgroundColor(resources.getColor(R.color.red, theme))
+        } else {
+            statusTextView.text = "Status: Abierto"
+            statusTextView.setBackgroundColor(resources.getColor(R.color.green, theme))
         }
     }
+
     private fun setupCountryToggle() {
         val toggleButton = findViewById<ToggleButton>(R.id.toggleIdioma)
 
@@ -78,9 +81,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateToggleButtonBackground(button: ToggleButton, isSpanish: Boolean) {
         if (isSpanish) {
-            button.setBackgroundResource(R.drawable.espana) // Change this to your actual drawable resource for "on"
+            button.setBackgroundResource(R.drawable.espana)
         } else {
-            button.setBackgroundResource(R.drawable.usa) // Change this to your actual drawable resource for "off"
+            button.setBackgroundResource(R.drawable.usa)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateStatusTextView()
     }
 }
