@@ -16,10 +16,10 @@
             android:name=".InformeActivity"
             android:exported="false" />
         <activity
-            android:name=".MensajeActivity"
+            android:name=".AlertasActivity"
             android:exported="false" />
         <activity
-            android:name=".MotivoActivity"
+            android:name=".MsjMotivoActivity"
             android:exported="false" />
         <activity
             android:name=".BloquearActivity"

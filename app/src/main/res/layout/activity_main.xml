@@ -178,7 +178,7 @@
         app:srcCompat="@drawable/candado" />
 
     <ImageButton
-        android:id="@+id/activityBtn"
+        android:id="@+id/alertaBtn"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="28dp"

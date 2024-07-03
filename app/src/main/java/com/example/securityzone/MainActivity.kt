@@ -35,15 +35,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupButtonClickListeners() {
         findViewById<ImageButton>(R.id.mensajeBtn).setOnClickListener {
-            startActivity(Intent(this, MensajeActivity::class.java))
+            startActivity(Intent(this, MsjMotivoActivity::class.java))
         }
 
         findViewById<ImageButton>(R.id.bloquearBtn).setOnClickListener {
             startActivity(Intent(this, BloquearActivity::class.java))
         }
 
-        findViewById<ImageButton>(R.id.activityBtn).setOnClickListener {
-            startActivity(Intent(this, MotivoActivity::class.java))
+        findViewById<ImageButton>(R.id.alertaBtn).setOnClickListener {
+            startActivity(Intent(this, AlertasActivity::class.java))
         }
 
         findViewById<ImageButton>(R.id.informeBtn).setOnClickListener {
