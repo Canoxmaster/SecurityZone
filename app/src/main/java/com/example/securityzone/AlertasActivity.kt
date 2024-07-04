@@ -84,7 +84,7 @@ class AlertasActivity : AppCompatActivity() {
 
     private fun setupButtonClickListeners() {
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 }
