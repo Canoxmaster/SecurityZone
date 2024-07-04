@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 
 class BloquearActivity : AppCompatActivity() {
     private lateinit var preferencesManager: PreferencesManager
@@ -51,13 +52,13 @@ class BloquearActivity : AppCompatActivity() {
         if (preferencesManager.isBlocked) {
             statusTextView.text = "Status: Bloqueado"
             statusTextView.setBackgroundColor(resources.getColor(R.color.red, theme))
-            bloquearButton.isEnabled = false
-            desbloquearButton.isEnabled = true
+            bloquearButton.isVisible = false
+            desbloquearButton.isVisible = true
         } else {
             statusTextView.text = "Status: Abierto"
             statusTextView.setBackgroundColor(resources.getColor(R.color.green, theme))
-            bloquearButton.isEnabled = true
-            desbloquearButton.isEnabled = false
+            bloquearButton.isVisible= true
+            desbloquearButton.isVisible = false
         }
     }
 }
