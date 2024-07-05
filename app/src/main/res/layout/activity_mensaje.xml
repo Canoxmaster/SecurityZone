@@ -81,9 +81,11 @@
 
                 <EditText
                     android:id="@+id/editTextTextMultiLine"
-                    android:layout_width="405dp"
+                    android:layout_width="350dp"
                     android:layout_height="54dp"
-                    android:layout_marginTop="104dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginEnd="8dp"
                     android:background="#FFFFFF"
                     android:ems="10"
                     android:gravity="start|top"

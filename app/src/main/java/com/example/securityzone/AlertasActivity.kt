@@ -15,11 +15,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class AlertasActivity : AppCompatActivity() {
     private lateinit var textViewAlerta1: TextView
     private lateinit var textViewAlerta2: TextView
     private lateinit var textViewAlerta3: TextView
+    private lateinit var timeViewAlerta1: TextView
+    private lateinit var timeViewAlerta2: TextView
+    private lateinit var timeViewAlerta3: TextView
 
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -43,6 +50,10 @@ class AlertasActivity : AppCompatActivity() {
         textViewAlerta2 = findViewById(R.id.textViewAlerta2)
         textViewAlerta3 = findViewById(R.id.textViewAlerta3)
 
+        timeViewAlerta1 = findViewById(R.id.timeView1)
+        timeViewAlerta2 = findViewById(R.id.timeView2)
+        timeViewAlerta3 = findViewById(R.id.timeView3)
+
         /*
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -60,13 +71,15 @@ class AlertasActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 //val stringBuilder = StringBuilder()
                 val textosArray = mutableListOf<String>()
+                val fechasArray = mutableListOf<Date>()
                 for (document in result) {
-                    val campoDeseado = document.getString("texto")
-                    Log.d(TAG, "${document.id} => $campoDeseado")
-                    //stringBuilder.append("$campoDeseado")
-
-                    campoDeseado?.let {
+                    val campoTexto = document.getString("texto")
+                    val campoFecha = document.getDate("hora")
+                    campoTexto?.let {
                         textosArray.add(it)
+                    }
+                    campoFecha?.let {
+                        fechasArray.add(it)
                     }
                 }
                 //textViewAlerta1.text = stringBuilder.toString()
@@ -75,6 +88,15 @@ class AlertasActivity : AppCompatActivity() {
                 textViewAlerta2.text = textosArray[1]
                 textViewAlerta3.text = textosArray[2]
 
+                if(fechasArray.isNotEmpty()) {
+                    val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault()).apply {
+                        timeZone = TimeZone.getTimeZone("GMT-6")
+                    }
+
+                    timeViewAlerta1.text = sdf.format(fechasArray[0]).toString()
+                    timeViewAlerta2.text = sdf.format(fechasArray[1]).toString()
+                    timeViewAlerta3.text = sdf.format(fechasArray[2]).toString()
+                }
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
