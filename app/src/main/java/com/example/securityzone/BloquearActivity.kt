@@ -1,8 +1,10 @@
 package com.example.securityzone
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -13,12 +15,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Timestamp
+import java.util.Date
 
 class BloquearActivity : AppCompatActivity() {
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var statusTextView: TextView
     private lateinit var bloquearButton: Button
     private lateinit var desbloquearButton: Button
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,23 @@ class BloquearActivity : AppCompatActivity() {
 
         setupButtonClickListeners()
         updateUI()
+
+    }
+
+    private fun readTxtField(textF: String) {
+        val data = hashMapOf(
+            "text" to textF,
+            "hora" to com.google.firebase.Timestamp(Date())
+        )
+
+        db.collection("alertas")
+            .add(data)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
     }
 
     private fun setupButtonClickListeners() {
@@ -62,6 +85,7 @@ class BloquearActivity : AppCompatActivity() {
                 if (inputText.isNotEmpty()) {
                     preferencesManager.isBlocked = true
                     // Aquí puedes guardar el inputText si es necesario
+                    readTxtField(inputText)
                     updateUI()
                 }
             }
