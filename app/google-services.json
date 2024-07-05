@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57428023529:android:1922d0497562973b7ff878",
+        "mobilesdk_app_id": "id",
         "android_client_info": {
           "package_name": "com.example.securityzone"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAi3UjI9Ju57YjZtB4TfEbSV_tVQkeEWaM"
+          "current_key": "key"
         }
       ],
       "services": {
