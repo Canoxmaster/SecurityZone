@@ -41,7 +41,7 @@ class BloquearActivity : AppCompatActivity() {
 
     }
 
-    private fun readTxtField(textF: String) {
+    private fun readTxtField(textF: String, onComplete: (Boolean) -> Unit) {
         val data = hashMapOf(
             "text" to textF,
             "hora" to com.google.firebase.Timestamp(Date())
@@ -51,9 +51,11 @@ class BloquearActivity : AppCompatActivity() {
             .add(data)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                onComplete(true)
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
+                onComplete(false)
             }
     }
 
@@ -72,7 +74,7 @@ class BloquearActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBloquearDialog() {
+    fun showBloquearDialog() {
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
         val dialogLayout = inflater.inflate(R.layout.dialog_bloquear, null)
@@ -84,9 +86,12 @@ class BloquearActivity : AppCompatActivity() {
                 val inputText = editText.text.toString()
                 if (inputText.isNotEmpty()) {
                     preferencesManager.isBlocked = true
-                    // Aquí puedes guardar el inputText si es necesario
-                    readTxtField(inputText)
-                    updateUI()
+                    readTxtField(inputText) { success ->
+                        updateUI()
+                        showSaveResult(success)
+                    }
+                } else {
+                    showSaveResult(false)
                 }
             }
             .setNegativeButton("Cancelar") { dialog, _ ->
@@ -94,6 +99,21 @@ class BloquearActivity : AppCompatActivity() {
             }
 
         builder.create().show()
+    }
+
+    private fun showSaveResult(success: Boolean) {
+        val message = if (success) {
+            "Bloqueo activado y guardado con éxito"
+        } else {
+            "Error al guardar el bloqueo. Por favor, intente de nuevo."
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun updateUI() {
